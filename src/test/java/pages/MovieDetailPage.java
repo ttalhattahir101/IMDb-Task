@@ -11,8 +11,11 @@ public class MovieDetailPage extends BasePage{
 
     By watchListIcon = By.xpath("//*[@id='title-overview-widget']/div[1]/div[2]/div/div[2]/div[1]/div[1]/div");
     By yourMovieRating = By.className("star-rating-value");
+    By noRating = By.xpath("//*[@id='star-rating-widget']/div/div");
 
-    public String getAttributeValue() {
+    //***********************Methods********************************************
+
+    public String getAttributeValueWatchList() {
         explicitWait(watchListIcon);
         return driver.findElement(watchListIcon).getAttribute("title");
     }
@@ -26,6 +29,13 @@ public class MovieDetailPage extends BasePage{
         explicitWait(yourMovieRating);
         return driver.findElement(yourMovieRating).getText();
     }
+    public String getValueOfNoRating() throws InterruptedException {
+        Thread.sleep(2000);
+        WebElement noRatingValue = driver.findElement(noRating);
+        String getValueText = noRatingValue.getAttribute("value");
+        return getValueText;
+    }
+
     public MovieDetailPage(WebDriver driver) {
         this.driver=driver;
     }

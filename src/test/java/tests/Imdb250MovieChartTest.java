@@ -1,5 +1,7 @@
 package tests;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.testng.annotations.*;
 
 import io.qameta.allure.Description;
@@ -24,6 +26,9 @@ public class Imdb250MovieChartTest extends BaseTest {
         signInPageObj = new SignInPage(driver);
         detailMoviePageObj = new MovieDetailPage(driver);
         basePageObj = new BasePage();
+        imdbMviePageObj.clickOnSignInMenuBar();
+        signInPageObj.clickSignInWithImdbButton();
+        signInPageObj.loginWithImdb();
     }
 
     @Test
@@ -39,7 +44,63 @@ public class Imdb250MovieChartTest extends BaseTest {
         Assert.assertEquals(imdbMviePageObj.getImdbChartHeading(),"IMDb Charts");
         Assert.assertEquals(imdbMviePageObj.getTopMovieRatingHeading(),"Top Rated Movies");
         Assert.assertEquals(imdbMviePageObj.getTopMovieRatingBody(),"Top 250 as rated by IMDb Users");
-        Assert.assertEquals(imdbMviePageObj.get250TitlesLabel(),"Showing 250 Titles");
+        Assert.assertEquals(imdbMviePageObj.get250TopMovieTitleLabel(),"Showing 250 Titles");
+    }
+
+    @Test
+    @Description("Add movie to watch list")
+    public void addMovieToWatchList() throws InterruptedException {
+        Assert.assertEquals(imdbMviePageObj.getAttributeValueOfWatchList(0),
+                "Click to add to watchlist");
+        imdbMviePageObj.clickWatchListIcon(1);
+        Thread.sleep(1000);
+        Assert.assertEquals(imdbMviePageObj.getAttributeValueOfWatchList(1),
+                "Click to remove from watchlist");
+        imdbMviePageObj.clickOnMovieTitle(1);
+        Assert.assertEquals(detailMoviePageObj.getAttributeValueWatchList(),
+                "Click to remove from watchlist");
+        driver.navigate().back();
+    }
+
+    @Test
+    @Description("Remove movie from watch list")
+    public void removeMovieFromWatchList() throws InterruptedException {
+        imdbMviePageObj.clickWatchListIcon(1);
+        imdbMviePageObj.clickOnMovieTitle(1);
+        Thread.sleep(1000);
+        Assert.assertEquals(detailMoviePageObj.getAttributeValueWatchList(),
+                "Click to add to watchlist" );
+        driver.navigate().back();
+    }
+
+    @Test
+    @Description("Sort top 250 movies by ascending and descending order")
+    public void sortOrderOfTop250Movies() {
+        Assert.assertEquals(imdbMviePageObj.clickSortingIcon(),"Descending order");
+        Assert.assertEquals(imdbMviePageObj.clickSortingIcon(),"Ascending order");
+    }
+
+    @Test
+    @Description("Add rating against movie from the list and verify")
+    public void addRatingOfMovie() throws InterruptedException {
+        imdbMviePageObj.clickFirstMovieToMarkSeen();
+        Thread.sleep(20);
+        Assert.assertEquals(imdbMviePageObj.getSeenTextOfFirstMovie(),"Seen");
+        imdbMviePageObj.rateFirstMovie();
+        Assert.assertEquals(imdbMviePageObj.getRatingOfFirstMovie(),"4");
+        imdbMviePageObj.clickOnMovieTitle(0);
+        Assert.assertEquals(detailMoviePageObj.getYourRatingValue(),"4");
+        driver.navigate().back();
+    }
+
+    @Test
+    @Description("Remove rating from the list and verify ")
+    public void removeRatingOfMovie() throws InterruptedException {
+        imdbMviePageObj.clickRatingOfFirstMovie();
+        imdbMviePageObj.deleteRatingOfFirstMovie();
+        imdbMviePageObj.clickOnMovieTitle(0);
+        Assert.assertEquals(detailMoviePageObj.getValueOfNoRating(),"0");
+        driver.navigate().back();
     }
 
     @Test
@@ -56,48 +117,6 @@ public class Imdb250MovieChartTest extends BaseTest {
         imdbMviePageObj.selectValueFromSortByDropDown("Ranking");
         Assert.assertEquals(driver.getCurrentUrl(),"https://www.imdb.com/chart/top?sort=rk,asc&mode=simple&page=1");
     }
-
-    @Test
-    @Description("Sort top 250 movies by ascending and descending order")
-    public void sortOrderOfTop250Movies() {
-        Assert.assertEquals(imdbMviePageObj.clickSortingIcon(),"Descending order");
-        Assert.assertEquals(imdbMviePageObj.clickSortingIcon(),"Ascending order");
-    }
-
-    @Test
-    @Description("Add movie to watch list and remove the same movie from watch list")
-    public void addMovieToWatchList() throws InterruptedException {
-        imdbMviePageObj.clickOnSignInMenuBar();
-        signInPageObj.clickSignInWithImdbButton();
-        signInPageObj.loginWithImdb();
-        Assert.assertEquals(imdbMviePageObj.getAttributeValueOfWatchList(0), "Click to add to watchlist");
-        imdbMviePageObj.addMovieToWatchList(0);
-        Thread.sleep(1000);
-        Assert.assertEquals(imdbMviePageObj.getAttributeValueOfWatchList(0),"Click to remove from watchlist");
-        imdbMviePageObj.clickOnMovieTitle(0);
-        Assert.assertEquals(detailMoviePageObj.getAttributeValue(),"Click to remove from watchlist" );
-        detailMoviePageObj.clickOnWatchListIcon();
-        driver.navigate().back();
-        Assert.assertEquals(imdbMviePageObj.getAttributeValueOfWatchList(0), "Click to add to watchlist");
-    }
-
-    @Test
-    @Description("Add and remove rating from the list")
-    public void addRemoverating() throws InterruptedException {
-        imdbMviePageObj.clickFirstMovieToMarkSeen();
-        Thread.sleep(20);
-        Assert.assertEquals(imdbMviePageObj.getSeenTextOfFirstMovie(),"Seen");
-        imdbMviePageObj.rateFirstMovie4();
-        Assert.assertEquals(imdbMviePageObj.getRatingOfFirstMovie(),"4");
-        imdbMviePageObj.clickOnMovieTitle(0);
-        Assert.assertEquals(detailMoviePageObj.getYourRatingValue(),"4");
-        driver.navigate().back();
-        imdbMviePageObj.clickRatingOfFirstMovie();
-        imdbMviePageObj.deleteRatingOfFirstMovie();
-    }
-
-
-
 
     @AfterClass
     public void tearDown() {
