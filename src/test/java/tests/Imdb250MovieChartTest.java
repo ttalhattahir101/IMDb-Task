@@ -65,10 +65,11 @@ public class Imdb250MovieChartTest extends BaseTest {
     }
 
     @Test
+    @Description("Add movie to watch list and remove the same movie from watch list")
     public void addMovieToWatchList() throws InterruptedException {
         imdbMviePageObj.clickOnSignInMenuBar();
         signInPageObj.clickSignInWithImdbButton();
-        signInPageObj.loginWithImdb("ttalhattahir+2@gmail.com","12345678");
+        signInPageObj.loginWithImdb();
         Assert.assertEquals(imdbMviePageObj.getAttributeValueOfWatchList(0), "Click to add to watchlist");
         imdbMviePageObj.addMovieToWatchList(0);
         Thread.sleep(1000);
@@ -80,12 +81,30 @@ public class Imdb250MovieChartTest extends BaseTest {
         Assert.assertEquals(imdbMviePageObj.getAttributeValueOfWatchList(0), "Click to add to watchlist");
     }
 
+    @Test
+    @Description("Add and remove rating from the list")
+    public void addRemoverating() throws InterruptedException {
+        imdbMviePageObj.clickFirstMovieToMarkSeen();
+        Thread.sleep(20);
+        Assert.assertEquals(imdbMviePageObj.getSeenTextOfFirstMovie(),"Seen");
+        imdbMviePageObj.rateFirstMovie4();
+        Assert.assertEquals(imdbMviePageObj.getRatingOfFirstMovie(),"4");
+        imdbMviePageObj.clickOnMovieTitle(0);
+        Assert.assertEquals(detailMoviePageObj.getYourRatingValue(),"4");
+        driver.navigate().back();
+        imdbMviePageObj.clickRatingOfFirstMovie();
+        imdbMviePageObj.deleteRatingOfFirstMovie();
+    }
+
 
 
 
     @AfterClass
     public void tearDown() {
-       // imdbMviePageObj =null;
+        imdbMviePageObj =null;
+        basePageObj = null;
+        detailMoviePageObj = null;
+        signInPageObj = null;
         quitBrowser();
     }
 

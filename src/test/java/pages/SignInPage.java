@@ -37,9 +37,10 @@ public class SignInPage extends BasePage{
     }
 
 
-    public void loginWithImdb(String email, String password) {
-        enterTextInEmailField(email);
-        enterTextInPassowrdField(password);
+    public void loginWithImdb() {
+        readFile();
+        enterTextInEmailField(prop.getProperty("email"));
+        enterTextInPassowrdField(prop.getProperty("password"));
         clickOnSignInButton();
     }
 

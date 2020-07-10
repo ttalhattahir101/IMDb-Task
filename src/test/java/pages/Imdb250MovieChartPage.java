@@ -28,7 +28,12 @@ public class Imdb250MovieChartPage extends BasePage{
     By watchListIcon = By.cssSelector("div[class*='wl-ribbon standalone retina']");
     By watchListMenuBar = By.xpath("//*[@id='imdbHeader']/div[2]/div[4]/a/div");
     By movieTitleColumn = By.className("titleColumn");
-
+    By markSeen = By.xpath("//*[@id='main']/div/span/div/div/div[3]/table/tbody/tr[1]/td[4]/div/div[2]/div[3]");
+    By seenText = By.xpath("//div[@class='seen-widget seen-widget-tt0111161 seen']//div[@class='seen'][contains(text(),'Seen')]");
+    By ratingForFirstMovie = By.xpath("//*[@id='main']/div/span/div/div/div[3]/table/tbody/tr[1]/td[4]/div/div[2]/div[4]");
+    By rateFirstMovie = By.xpath("//div[@class='seen-widget seen-widget-tt0111161 seen']//li[contains(text(),'4')]");
+    By ratingNumberOfFirstMovie = By.xpath("//*[@id='main']/div/span/div/div/div[3]/table/tbody/tr[1]/td[4]/div/div[2]/div[4]");
+    By deleteRatingForFirstMovie = By.xpath("//*[@id='main']/div/span/div/div/div[3]/table/tbody/tr[1]/td[4]/div/div[1]/div/span");
     //***********************Methods********************************************
 
     @Step("Verify IMDb chart heading")
@@ -82,6 +87,37 @@ public class Imdb250MovieChartPage extends BasePage{
         movieList.get(inputMovieWatch).findElement(watchListColumn).findElement(watchListIcon).click();
     }
 
+    @Step("Mark first movie as seen from the list")
+    public void clickFirstMovieToMarkSeen() {
+        explicitWait(markSeen);
+        driver.findElement(markSeen).click();
+    }
+
+    public String getSeenTextOfFirstMovie() {
+        explicitWait(seenText);
+       return   driver.findElement(seenText).getText();
+    }
+
+    public String getRatingOfFirstMovie() {
+        explicitWait(ratingForFirstMovie);
+     return driver.findElement(ratingForFirstMovie).getText();
+    }
+
+    @Step("Rate first movie from the list")
+    public void rateFirstMovie4() {
+        driver.findElement(rateFirstMovie).click();
+    }
+
+    public void clickRatingOfFirstMovie() {
+        explicitWait(ratingNumberOfFirstMovie);
+        driver.findElement(ratingNumberOfFirstMovie).click();
+    }
+
+    @Step("Delete rating of first movie from the list")
+    public void deleteRatingOfFirstMovie() {
+        driver.findElement(deleteRatingForFirstMovie).click();
+    }
+
     public Imdb250MovieChartPage(WebDriver driver) {
         this.driver=driver;
     }
@@ -102,6 +138,4 @@ public class Imdb250MovieChartPage extends BasePage{
         driver.findElement(shareIcon).click();
     }
 
-
-
-}
+    }

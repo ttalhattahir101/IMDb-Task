@@ -37,9 +37,6 @@ public class BaseTest {
         return driver;
     }
 
-    public void implicitWait() {
-        driver.manage().timeouts().implicitlyWait(50, TimeUnit.SECONDS);
-    }
 
     public void quitBrowser()
     {

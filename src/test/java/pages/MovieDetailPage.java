@@ -10,6 +10,7 @@ public class MovieDetailPage extends BasePage{
     //////////***************PageObject Variables********************************
 
     By watchListIcon = By.xpath("//*[@id='title-overview-widget']/div[1]/div[2]/div/div[2]/div[1]/div[1]/div");
+    By yourMovieRating = By.className("star-rating-value");
 
     public String getAttributeValue() {
         explicitWait(watchListIcon);
@@ -21,8 +22,11 @@ public class MovieDetailPage extends BasePage{
         explicitWait(watchListIcon);
         driver.findElement(watchListIcon).click();
     }
+    public String getYourRatingValue() {
+        explicitWait(yourMovieRating);
+        return driver.findElement(yourMovieRating).getText();
+    }
     public MovieDetailPage(WebDriver driver) {
         this.driver=driver;
     }
-
 }
