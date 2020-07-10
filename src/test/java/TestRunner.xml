@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="Functional Tests Gymwolf" verbose="1" >
+<test name="Registration + Exercises and Workout Section">
+    <classes>
+        <class name="tests.Imdb250MovieChartTest"/>
+        <class name="tests.ExercisePlanPageTest"/>
+    </classes>
+</test>
+</suite>
